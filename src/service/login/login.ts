@@ -7,3 +7,15 @@ export function accountLoginRequest(account: IAccount) {
     data: account
   })
 }
+
+export function getUserInfoById(id: number) {
+  return dsRequest.get({
+    url: `/users/${id}`
+  })
+}
+
+export function UserMenusListRequest(id: number) {
+  return dsRequest.get({
+    url: `/role/${id}/menu`
+  })
+}

@@ -45,17 +45,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import paneAccount from './pane-account.vue'
-import panePhone from './pane-phone.vue'
+import { ref, watch } from 'vue'
+import PaneAccount from './pane-account.vue'
+import PanePhone from './pane-phone.vue'
+
+import { localCache } from '@/utils/cache'
+import { IS_REMPWD } from '@/global/constants'
 
 const activeName = ref('account')
-const isRemPwd = ref(false)
+// 记住密码功能
+const isRemPwd = ref<boolean>(localCache.getCache(IS_REMPWD) ?? true)
+watch(isRemPwd, (newValue) => {
+  localCache.setCache(IS_REMPWD, newValue)
+})
 
-const accountRef = ref<InstanceType<typeof paneAccount>>()
+const accountRef = ref<InstanceType<typeof PaneAccount>>()
 const handleLoginBtnClick = () => {
   if (activeName.value == 'account') {
-    accountRef.value?.loginAction()
+    accountRef.value?.loginAction(isRemPwd.value)
   } else {
     console.log('用户在进行手机登录')
   }

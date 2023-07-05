@@ -22,7 +22,6 @@ class DsRequest {
     // 每个instance实例都添加拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('全局请求成功的拦截')
         return config
       },
       (err) => {
@@ -33,7 +32,6 @@ class DsRequest {
 
     this.instance.interceptors.response.use(
       (res) => {
-        console.log('全局响应成功的拦截')
         return res.data
       },
       (err) => {
@@ -69,7 +67,6 @@ class DsRequest {
           if (config.interceptors?.responseSuccessFn) {
             res = config.interceptors.responseSuccessFn(res)
           }
-          console.log('单次响应的成功拦截处理')
           resolve(res)
         },
         (err) => {

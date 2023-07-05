@@ -4,9 +4,9 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts" name="role"></script>
 
-<style lang="less" scoped>
+<style scoped>
 .role {
 }
 </style>

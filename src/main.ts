@@ -5,10 +5,10 @@ import 'normalize.css'
 import '@/assets/css/index.less'
 import router from './router'
 import pinia from './store'
-import registerIcons from './global/register-icons'
+import icon from './global/register-icons'
 
 const app = createApp(App)
-app.use(router)
+app.use(icon)
 app.use(pinia)
-app.use(registerIcons)
+app.use(router)
 app.mount('#app')

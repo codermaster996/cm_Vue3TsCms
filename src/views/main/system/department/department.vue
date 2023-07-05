@@ -4,9 +4,9 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts" name="department"></script>
 
-<style lang="less" scoped>
+<style scoped>
 .department {
 }
 </style>

@@ -10,6 +10,7 @@ import { ElMessage } from 'element-plus'
 
 import { LOGIN_TOKEN, USER_INFO, USER_MENUS } from '@/global/constants'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 interface ILoginState {
   token: string
@@ -19,9 +20,9 @@ interface ILoginState {
 
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
-    token: localCache.getCache(LOGIN_TOKEN) ?? '',
-    userInfo: localCache.getCache(USER_INFO) ?? '',
-    userMenus: localCache.getCache(USER_MENUS) ?? ''
+    token: '',
+    userInfo: '',
+    userMenus: ''
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -45,9 +46,29 @@ const useLoginStore = defineStore('login', {
       localCache.setCache(USER_INFO, userInfo)
       localCache.setCache(USER_MENUS, userMenus)
 
+      // 重要: 动态的添加路由
+      const routes = mapMenusToRoutes(userMenus)
+      routes.forEach((route) => router.addRoute('main', route))
+
       // 5.页面跳转(main页面) 和 登录成功提示
       ElMessage.success('登陆成功')
       router.push('/main')
+    },
+
+    loadLocalCacheAction() {
+      // 1.用户进行刷新默认加载数据
+      const token = localCache.getCache(LOGIN_TOKEN)
+      const userInfo = localCache.getCache(USER_INFO)
+      const userMenus = localCache.getCache(USER_MENUS)
+      if (token && userInfo && userMenus) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenus = userMenus
+
+        // 2.动态添加路由
+        const routes = mapMenusToRoutes(userMenus)
+        routes.forEach((route) => router.addRoute('main', route))
+      }
     }
   }
 })

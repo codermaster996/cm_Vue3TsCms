@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { localCache } from '@/utils/cache'
 import { LOGIN_TOKEN } from '@/global/constants'
+import { firstMenu } from '@/utils/map-menus'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -17,41 +18,8 @@ const router = createRouter({
     },
     {
       path: '/main',
-      component: () => import('../views/main/main.vue'),
-      children: [
-        {
-          path: '/main',
-          redirect: '/main/analysis/overview'
-        },
-        // 系统总览
-        {
-          path: '/main/analysis/overview',
-          component: () => import('@/views/main/analysis/overview/overview.vue')
-        },
-        {
-          path: '/main/analysis/dashboard',
-          component: () =>
-            import('@/views/main/analysis/dashboard/dashboard.vue')
-        },
-        // 系统管理
-        {
-          path: '/main/system/user',
-          component: () => import('@/views/main/system/user/user.vue')
-        },
-        {
-          path: '/main/system/department',
-          component: () =>
-            import('@/views/main/system/department/department.vue')
-        },
-        {
-          path: '/main/system/menu',
-          component: () => import('@/views/main/system/menu/menu.vue')
-        },
-        {
-          path: '/main/system/role',
-          component: () => import('@/views/main/system/role/role.vue')
-        }
-      ]
+      name: 'main',
+      component: () => import('../views/main/main.vue')
     },
     {
       path: '/:pathMatch(.*)',
@@ -66,6 +34,11 @@ router.beforeEach((to) => {
   const token = localCache.getCache(LOGIN_TOKEN)
   if (to.path.startsWith('/main') && !token) {
     return '/login'
+  }
+
+  // 如果是进入到main
+  if (to.path === '/main') {
+    return firstMenu?.url
   }
 })
 
